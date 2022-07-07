@@ -22,6 +22,31 @@ static KEYS: Lazy<identity::Keypair> = Lazy::new(|| identity::Keypair::generate_
 static PEER_ID: Lazy<PeerId> = Lazy::new(|| PeerId::from(KEYS.public()));
 static TOPIC: Lazy<Topic> = Lazy::new(|| Topic::new("recipes"));
 
+struct Recipe {
+    id: u64,
+    name: String,
+    ingredients: String,
+    instructions: String,
+    public: bool
+}
+
+type Recipes = Vec<Recipe>
+enum ListMode {
+    All,
+    One(String)
+}
+struct ListRequest {
+    mode: ListMode
+}
+struct ListResponse {
+    mode: ListMode,
+    data: Recipes,
+    receiver: String
+}
+enum EventType {
+    Response(ListResponse),
+    Input(String)
+}
 fn main() {
     println!("Hello, world!");
 }
